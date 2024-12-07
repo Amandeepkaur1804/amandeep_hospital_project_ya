@@ -13,18 +13,29 @@ function ApplyDoctor() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  
   const onFinish = async (values) => {
     try {
+      console.log("Form Values: ", values);  // Log form values to debug
+      // Ensure that timings is in correct format (array of moment objects)
+      const formattedTimings = [
+        moment(values.timings[0]).format("HH:mm"),
+        moment(values.timings[1]).format("HH:mm"),
+      ];
+      
+      // Check if timings are valid
+      if (!formattedTimings[0] || !formattedTimings[1]) {
+        toast.error("Invalid timings format");
+        return;
+      }
+
       dispatch(showLoading());
       const response = await axios.post(
         "/api/user/apply-doctor-account",
         {
           ...values,
           userId: user._id,
-          timings: [
-            moment(values.timings[0]).format("HH:mm"),
-            moment(values.timings[1]).format("HH:mm"),
-          ],
+          timings: formattedTimings,  // Send the formatted timings
         },
         {
           headers: {
@@ -41,6 +52,7 @@ function ApplyDoctor() {
       }
     } catch (error) {
       dispatch(hideLoading());
+      console.error(error);  // Log the full error to the console
       toast.error("Something went wrong");
     }
   };
@@ -49,7 +61,6 @@ function ApplyDoctor() {
     <Layout>
       <h1 className="page-title">Apply Doctor</h1>
       <hr />
-
       <DoctorForm onFinish={onFinish} />
     </Layout>
   );

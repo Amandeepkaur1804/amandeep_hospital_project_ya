@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import { Button } from "antd";
+// import { Button } from "antd";
 import { Toaster } from "react-hot-toast";
 import Home from "./pages/Home";
 import { useSelector } from "react-redux";
@@ -23,7 +23,7 @@ function App() {
     <BrowserRouter>
       {loading && (
         <div className="spinner-parent">
-          <div class="spinner-border" role="status"></div>
+          <div className="spinner-border" role="status"></div>
         </div>
       )}
       <Toaster position="top-center" reverseOrder={false} />
